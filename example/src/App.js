@@ -1,10 +1,17 @@
-import React from 'react'
+import React from "react";
 
-import { ExampleComponent } from 'table-options'
-import 'table-options/dist/index.css'
+import TableOptions from "table-options";
 
 const App = () => {
-  return <ExampleComponent text="Create React Library Example 😄" />
-}
+  function handleSettings() {
+    console.log("Dispara a função de configurações do menu");
+  }
 
-export default App
+  function handleExit() {
+    console.log("Dispara a função de saída do menu");
+  }
+
+  return <TableOptions navbarActions={{ handleSettings, handleExit }} />;
+};
+
+export default App;
