@@ -5,57 +5,8 @@ import { color, font } from "../../../../config/styles";
 export const Wrapper = styled.div`
   width: 180px;
 `;
-export const TableHeader = styled.div`
-  background-color: ${color.primary};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 40px;
-  h1 {
-    color: ${color.text};
-    font-size: 12pt;
-    line-height: 14pt;
-    text-transform: uppercase;
-    font-family: ${font.family.primary};
-  }
-  img {
-    cursor: pointer;
-    height: 15px;
-    margin-left: 5px;
-    transform: ${props => (props.rotate ? "rotate(180deg)" : "rotate(0deg)")};
-    :hover {
-      opacity: 0.8;
-    }
-  }
-`;
 
 export const TableContent = styled.div``;
-
-export const TableContentHeader = styled.div`
-  display: grid;
-  grid-template-columns: ${props => `repeat(${props.cols}, 1fr)`};
-  height: 40px;
-  margin-top: 5px;
-  background-color: ${color.primary};
-
-  h1 {
-    position: relative;
-    top: 5px;
-    margin: 10px;
-    color: ${color.text};
-    font-size: 12pt;
-    line-height: 14pt;
-    font-family: ${font.family.primary};
-
-    :nth-child(2) {
-      top: -5px;
-    }
-
-    :nth-child(even) {
-      text-transform: uppercase;
-    }
-  }
-`;
 
 export const TableContentRow = styled.div`
   display: grid;

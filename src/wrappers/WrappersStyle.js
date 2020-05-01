@@ -30,5 +30,9 @@ export const GlobalStyle = createGlobalStyle`
       color: ${color.text};
       text-transform: uppercase;
     }
+
+    .loadable-margin{
+      margin-top: 50px;
+    }
   }
 `;

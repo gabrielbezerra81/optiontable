@@ -13,7 +13,7 @@ import { optionsActions } from "../../store";
 export const Navbar = ({ handleSettings, handleExit }) => {
   const dispatch = useDispatch();
 
-  const { loadNavbarOptions, navbar } = optionsActions;
+  const { loadReactiveOptions, navbar } = optionsActions;
 
   const { isLoadingRequest } = useSelector(state => state.options);
 
@@ -22,7 +22,11 @@ export const Navbar = ({ handleSettings, handleExit }) => {
   function handleSearch() {
     const option = optionRef.current?.value;
     if (option) {
-      dispatch(loadNavbarOptions({ option }));
+      dispatch(
+        loadReactiveOptions({
+          mainOption: option
+        })
+      );
     }
   }
 

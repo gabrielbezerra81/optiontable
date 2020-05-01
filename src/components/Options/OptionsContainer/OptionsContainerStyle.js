@@ -13,20 +13,38 @@ export const Options = styled.div`
   display: grid;
   grid-template-rows: 1fr 1fr;
   grid-row-gap: 20px;
-  .content {
-    display: grid;
-    grid-template-columns: 3fr 1fr 3fr;
-    grid-column-gap: 10px;
-  }
 `;
 
-export const ShowMore = styled.span`
-  cursor: pointer;
+export const Main = styled.div`
+  margin-top: -70px;
+  display: grid;
+  grid-template-columns: 3fr 1fr 3fr;
+  grid-column-gap: 10px;
+`;
+
+const Move = styled.span`
+  display: ${props => (props.display ? null : "none")};
+  cursor: ${props => (props.disabled ? "unset" : "pointer")};
+  opacity: ${props => (props.disabled ? "0.4" : "1")};
+  position: relative;
   width: 100%;
   height: 40px;
   background-color: ${color.primary};
+
+  .totalItems {
+    position: absolute;
+    left: 10px;
+    bottom: 5px;
+  }
+
+  .countItems {
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+  }
+
   :hover {
-    opacity: 0.8;
+    opacity: ${props => (props.disabled ? "0.4" : "0.8")};
   }
   ::before {
     content: "";
@@ -39,8 +57,23 @@ export const ShowMore = styled.span`
     justify-content: center;
     width: 0;
     height: 0;
+  }
+`;
+
+export const MoveUp = styled(Move)`
+  margin-top: -15px;
+  ::before {
     border-left: 20px solid transparent;
     border-right: 20px solid transparent;
+    border-bottom: 20px solid #050000;
+  }
+`;
+
+export const MoveDown = styled(Move)`
+  margin-top: -10px;
+  ::before {
     border-top: 20px solid #050000;
+    border-right: 20px solid transparent;
+    border-left: 20px solid transparent;
   }
 `;

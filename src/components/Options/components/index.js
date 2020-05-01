@@ -1,3 +1,5 @@
+export { Header } from "./Header";
+
 export { Call } from "./Call";
 
 export { Strike } from "./Strike";

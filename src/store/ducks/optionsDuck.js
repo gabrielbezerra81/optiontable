@@ -3,12 +3,13 @@ import { createReducer, createActions } from "reduxsauce";
 const { Types, Creators } = createActions({
   loadingOptions: ["isLoadingRequest"],
   loadOptions: ["payload"],
-  loadNavbarOptions: ["payload"],
+  loadReactiveOptions: ["payload"],
   setFieldValues: ["payload"],
-  setTableCallOption: ["payload"],
-  removeTableCallOption: ["payload"],
-  setTablePutOption: ["payload"],
-  removeTablePutOption: ["payload"]
+  setTableOption: ["payload"],
+  removeTableOption: ["payload"],
+  loadPagination: [],
+  setItemUp: [],
+  setItemDown: []
 });
 
 const INITIAL_STATE = {
@@ -16,10 +17,19 @@ const INITIAL_STATE = {
   isRequestFailed: false,
   navbar: {},
   option: "",
+  allCalls: [],
+  allStrikes: [],
+  allPuts: [],
   calls: [],
   strikes: [],
   puts: [],
-  allOptions: []
+  allOptions: [],
+  pagination: {
+    itemsAbove: 0,
+    itemsBelow: 0,
+    itemsPerPage: 15,
+    initialItemIndex: 0
+  }
 };
 
 const loadingOptions = (state, { isLoadingRequest }) => {
@@ -38,66 +48,46 @@ const setFieldValues = (state, { payload }) => {
   };
 };
 
-const setTableCallOption = (state, { payload }) => {
+const setTableOption = (state, { payload }) => {
   if (state.allOptions.length < 6) {
     if (
-      state.calls.filter(({ id }) => id === payload.id).length > 0 &&
+      state.allOptions.filter(({ id }) => id === payload.id).length > 0 &&
       payload.cv === undefined
     ) {
-      const index = state.calls.indexOf(
-        state.calls.filter(({ id }) => id === payload.id)[0]
-      );
-
-      const cv = state.calls.filter(({ id }) => id === payload.id)[0].cv;
+      const cv = state.allOptions.filter(({ id }) => id === payload.id)[0].cv;
 
       const optionIndex = state.allOptions.indexOf(
         state.allOptions.filter(({ id }) => id === payload.id)[0]
       );
 
       if (cv === "sell") {
-        const calls = state.calls.filter(({ id }) => id !== payload.id);
-
         const allOptions = state.allOptions.filter(
           ({ id }) => id !== payload.id
         );
 
-        calls.splice(index, 0, {
-          cv: "buy",
-          initials: "C",
-          id: payload.id
-        });
-
         allOptions.splice(optionIndex, 0, {
           ...state.allOptions[optionIndex],
-          cv: "buy"
+          cv: "buy",
+          initials: "C"
         });
 
         return {
           ...state,
-          calls,
           allOptions
         };
       } else {
-        const calls = state.calls.filter(({ id }) => id !== payload.id);
-
         const allOptions = state.allOptions.filter(
           ({ id }) => id !== payload.id
         );
 
-        calls.splice(index, 0, {
-          cv: "sell",
-          initials: "V",
-          id: payload.id
-        });
-
         allOptions.splice(optionIndex, 0, {
           ...state.allOptions[optionIndex],
-          cv: "sell"
+          cv: "sell",
+          initials: "V"
         });
 
         return {
           ...state,
-          calls,
           allOptions
         };
       }
@@ -107,18 +97,11 @@ const setTableCallOption = (state, { payload }) => {
   if (state.allOptions.length < 6) {
     return {
       ...state,
-      calls: [
-        ...state.calls,
-        {
-          cv: payload.cv,
-          initials: payload.cv === "buy" ? "C" : "V",
-          id: payload.id
-        }
-      ],
       allOptions: [
         ...state.allOptions,
         {
           ...payload,
+          initials: payload.cv === "buy" ? "C" : "V",
           quantity: 0
         }
       ]
@@ -130,123 +113,95 @@ const setTableCallOption = (state, { payload }) => {
   }
 };
 
-const removeTableCallOption = (state, { payload }) => {
+const removeTableOption = (state, { payload }) => {
   const { id } = payload;
-
-  const calls = state.calls.filter(call => call.id !== id);
 
   const allOptions = state.allOptions.filter(option => option.id !== id);
 
   return {
     ...state,
-    calls,
     allOptions
   };
 };
 
-const setTablePutOption = (state, { payload }) => {
-  if (state.allOptions.length < 6) {
-    if (
-      state.puts.filter(({ id }) => id === payload.id).length > 0 &&
-      payload.cv === undefined
-    ) {
-      const index = state.puts.indexOf(
-        state.puts.filter(({ id }) => id === payload.id)[0]
-      );
+const loadPagination = state => {
+  const itemsBelow = state.strikes.length - state.pagination.itemsPerPage;
 
-      const cv = state.puts.filter(({ id }) => id === payload.id)[0].cv;
+  const { initialItemIndex, itemsPerPage } = state.pagination;
 
-      const optionIndex = state.allOptions.indexOf(
-        state.allOptions.filter(({ id }) => id === payload.id)[0]
-      );
-
-      if (cv === "sell") {
-        const puts = state.puts.filter(({ id }) => id !== payload.id);
-
-        const allOptions = state.allOptions.filter(
-          ({ id }) => id !== payload.id
-        );
-
-        puts.splice(index, 0, {
-          cv: "buy",
-          initials: "C",
-          id: payload.id
-        });
-
-        allOptions.splice(optionIndex, 0, {
-          ...state.allOptions[optionIndex],
-          cv: "buy"
-        });
-
-        return {
-          ...state,
-          puts,
-          allOptions
-        };
-      } else {
-        const puts = state.puts.filter(({ id }) => id !== payload.id);
-
-        const allOptions = state.allOptions.filter(
-          ({ id }) => id !== payload.id
-        );
-
-        puts.splice(index, 0, {
-          cv: "sell",
-          initials: "V",
-          id: payload.id
-        });
-
-        allOptions.splice(optionIndex, 0, {
-          ...state.allOptions[optionIndex],
-          cv: "sell"
-        });
-
-        return {
-          ...state,
-          puts,
-          allOptions
-        };
-      }
-    }
-  }
-
-  if (state.allOptions.length < 6) {
-    return {
-      ...state,
-      puts: [
-        ...state.puts,
-        {
-          cv: payload.cv,
-          initials: payload.cv === "buy" ? "C" : "V",
-          id: payload.id
-        }
-      ],
-      allOptions: [
-        ...state.allOptions,
-        {
-          ...payload,
-          quantity: 0
-        }
-      ]
-    };
-  } else {
-    return {
-      ...state
-    };
-  }
-};
-
-const removeTablePutOption = (state, { payload }) => {
-  const { id } = payload;
-
-  const puts = state.puts.filter(put => put.id !== id);
-
-  const allOptions = state.allOptions.filter(option => option.id !== id);
+  const calls = state.calls.slice(initialItemIndex, itemsPerPage);
+  const strikes = state.strikes.slice(initialItemIndex, itemsPerPage);
+  const puts = state.puts.slice(initialItemIndex, itemsPerPage);
 
   return {
     ...state,
+    calls,
+    strikes,
     puts,
-    allOptions
+    pagination: {
+      ...state.pagination,
+      itemsBelow
+    }
+  };
+};
+
+const setItemUp = state => {
+  const {
+    initialItemIndex,
+    itemsPerPage,
+    itemsAbove,
+    itemsBelow
+  } = state.pagination;
+
+  const calls = state.allCalls.slice(initialItemIndex - 1, itemsPerPage - 1);
+  const strikes = state.allStrikes.slice(
+    initialItemIndex - 1,
+    itemsPerPage - 1
+  );
+  const puts = state.allPuts.slice(initialItemIndex - 1, itemsPerPage - 1);
+
+  return {
+    ...state,
+    calls,
+    strikes,
+    puts,
+    pagination: {
+      ...state.pagination,
+      itemsAbove: itemsAbove - 1,
+      itemsBelow: itemsBelow + 1,
+      itemsPerPage: itemsPerPage - 1,
+      initialItemIndex: initialItemIndex - 1
+    }
+  };
+};
+
+const setItemDown = state => {
+  const {
+    initialItemIndex,
+    itemsPerPage,
+    itemsAbove,
+    itemsBelow
+  } = state.pagination;
+
+  const calls = state.allCalls.slice(initialItemIndex + 1, itemsPerPage + 1);
+  const strikes = state.allStrikes.slice(
+    initialItemIndex + 1,
+    itemsPerPage + 1
+  );
+  const puts = state.allPuts.slice(initialItemIndex + 1, itemsPerPage + 1);
+
+  return {
+    ...state,
+    calls,
+    strikes,
+    puts,
+    pagination: {
+      ...state.pagination,
+      itemsAbove: itemsAbove + 1,
+      itemsBelow: itemsBelow - 1,
+      itemsPerPage: itemsPerPage + 1,
+      initialItemIndex: initialItemIndex + 1
+    }
   };
 };
 
@@ -257,8 +212,9 @@ export { Creators as optionsActions };
 export const reducer = createReducer(INITIAL_STATE, {
   [Types.LOADING_OPTIONS]: loadingOptions,
   [Types.SET_FIELD_VALUES]: setFieldValues,
-  [Types.SET_TABLE_CALL_OPTION]: setTableCallOption,
-  [Types.REMOVE_TABLE_CALL_OPTION]: removeTableCallOption,
-  [Types.SET_TABLE_PUT_OPTION]: setTablePutOption,
-  [Types.REMOVE_TABLE_PUT_OPTION]: removeTablePutOption
+  [Types.SET_TABLE_OPTION]: setTableOption,
+  [Types.REMOVE_TABLE_OPTION]: removeTableOption,
+  [Types.LOAD_PAGINATION]: loadPagination,
+  [Types.SET_ITEM_UP]: setItemUp,
+  [Types.SET_ITEM_DOWN]: setItemDown
 });

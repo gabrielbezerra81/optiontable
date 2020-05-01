@@ -3,13 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { Loadable } from "../../../UI";
 
-import {
-  TableContent,
-  TableHeader,
-  TableHeaderDate,
-  TableHeaderTitle,
-  TableContentHeader
-} from "../Commons";
+import { TableContent } from "../Commons";
 import { Wrapper, TableContentRow, RowSelected } from "./CallStyle";
 
 import { optionsActions } from "../../../../store";
@@ -17,31 +11,20 @@ import { optionsActions } from "../../../../store";
 export const Call = () => {
   const dispatch = useDispatch();
 
-  const { setTableCallOption, removeTableCallOption } = optionsActions;
+  const { setTableOption, removeTableOption } = optionsActions;
 
-  const { isLoadingRequest, calls } = useSelector(state => state.options);
+  const { isLoadingRequest, calls, allOptions } = useSelector(
+    state => state.options
+  );
 
   return (
     <Wrapper>
-      <TableHeader>
-        <TableHeaderDate>
-          <span />
-          27/07/2019
-        </TableHeaderDate>
-
-        <TableHeaderTitle>Call</TableHeaderTitle>
-      </TableHeader>
-
       <TableContent>
-        <TableContentHeader cols={6}>
-          <h1>M</h1>
-          <h1>Taxa</h1>
-          <h1>VE</h1>
-          <h1>VI</h1>
-          <h1>Compra</h1>
-          <h1>Venda</h1>
-        </TableContentHeader>
-        <Loadable isLoading={isLoadingRequest} center>
+        <Loadable
+          isLoading={isLoadingRequest}
+          center
+          className="loadable-margin"
+        >
           {calls.map(call => (
             <TableContentRow key={call.id} cols={6}>
               <p className="M">
@@ -56,7 +39,7 @@ export const Call = () => {
                 className="value"
                 onClick={() => {
                   dispatch(
-                    setTableCallOption({
+                    setTableOption({
                       ...call,
                       cv: "sell"
                     })
@@ -69,7 +52,7 @@ export const Call = () => {
                 className="value"
                 onClick={() => {
                   dispatch(
-                    setTableCallOption({
+                    setTableOption({
                       ...call,
                       cv: "buy"
                     })
@@ -81,8 +64,8 @@ export const Call = () => {
 
               <RowSelected
                 active={
-                  calls.filter(({ id }) => id === call.id)[0] !== undefined
-                    ? calls.filter(({ id }) => id === call.id)[0].cv
+                  allOptions.filter(({ id }) => id === call.id)[0] !== undefined
+                    ? allOptions.filter(({ id }) => id === call.id)[0].cv
                     : ""
                 }
               >
@@ -90,24 +73,24 @@ export const Call = () => {
                   className="type"
                   onClick={() => {
                     dispatch(
-                      setTableCallOption({
+                      setTableOption({
                         ...call
                       })
                     );
                   }}
                 >
                   <span>
-                    {calls.filter(({ id }) => id === call.id)[0] !== undefined
-                      ? calls.filter(({ id }) => id === call.id)[0].initials
+                    {allOptions.filter(({ id }) => id === call.id)[0] !==
+                    undefined
+                      ? allOptions.filter(({ id }) => id === call.id)[0]
+                          .initials
                       : ""}
                   </span>
                 </div>
 
                 <div
                   className="remove"
-                  onClick={() =>
-                    dispatch(removeTableCallOption({ id: call.id }))
-                  }
+                  onClick={() => dispatch(removeTableOption({ id: call.id }))}
                 >
                   <span>x</span>
                 </div>

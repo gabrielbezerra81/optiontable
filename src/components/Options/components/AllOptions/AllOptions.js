@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useUndo from "use-undo";
 
@@ -25,17 +25,36 @@ import {
   Signature
 } from "./AllOptionsStyle";
 
-import { Icon } from "../../../UI";
+import { Icon, Loadable } from "../../../UI";
 
 import { color } from "../../../../config/styles";
+
+import { optionsActions } from "../../../../store";
 
 export const AllOptions = () => {
   const dispatch = useDispatch();
 
-  const { isLoadingRequest } = useSelector(state => state.options);
-  const options = useSelector(state => state.options);
+  const { removeTableOption, setFieldValues } = optionsActions;
 
-  const [{ present }, { set, undo, redo, canUndo, canRedo }] = useUndo(options);
+  const { isLoadingRequest, allOptions, allStrikes, option } = useSelector(
+    state => state.options
+  );
+
+  const [{ present }, { set, undo, redo, reset, canUndo, canRedo }] = useUndo(
+    allOptions
+  );
+
+  useEffect(() => {
+    set(allOptions);
+  }, [allOptions]);
+
+  useEffect(() => {
+    reset([]);
+  }, [option]);
+
+  useEffect(() => {
+    dispatch(setFieldValues({ field: "allOptions", values: present }));
+  }, [present]);
 
   return (
     <Wrapper>
@@ -62,13 +81,18 @@ export const AllOptions = () => {
 
         <button
           className="button"
-          onClick={() => dispatch(cleanSelectedOptions())}
-          disabled={present.allOptions.length < 1}
+          onClick={() =>
+            dispatch(setFieldValues({ field: "allOptions", values: [] }))
+          }
+          disabled={present.length < 1}
         >
           <h2>Limpar</h2> <Icon src={closeIcon} width="20px" />
         </button>
       </Actions>
-      {present.allOptions.length > 0 && (
+      <Loadable isLoading={isLoadingRequest} center>
+        <div />
+      </Loadable>
+      {allStrikes.length > 0 && (
         <Fragment>
           <Options>
             <div className="button">
@@ -108,7 +132,7 @@ export const AllOptions = () => {
             </TableHeader>
 
             <TableContent>
-              {present.allOptions.map(option => (
+              {present.map(option => (
                 <TableRow key={option.id} cv={option.cv} flag={option.model}>
                   <div className="cod">
                     <p>{option.symbol}</p>
@@ -164,10 +188,13 @@ export const AllOptions = () => {
 
                     <div
                       className="close"
+                      // onClick={() => {
+                      //   option.type === "CALL"
+                      //     ? dispatch(removeTableCallOption(option.id))
+                      //     : dispatch(removeTablePutOption(option.id));
+                      // }}
                       onClick={() => {
-                        option.type === "CALL"
-                          ? dispatch(removeTableCallOption(option.id))
-                          : dispatch(removeTablePutOption(option.id));
+                        dispatch(removeTableOption({ id: option.id }));
                       }}
                     >
                       <p>x</p>

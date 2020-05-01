@@ -1,18 +1,47 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { Wrapper, Options, ShowMore } from "./OptionsContainerStyle";
+import {
+  Wrapper,
+  Options,
+  Main,
+  MoveUp,
+  MoveDown
+} from "./OptionsContainerStyle";
 
-import { Call, Strike, Put, AllOptions } from "../components";
+import { Header, Call, Strike, Put, AllOptions } from "../components";
 
 import { optionsActions } from "../../../store";
 
 export const OptionsContainer = () => {
   const dispatch = useDispatch();
 
-  const { loadOptions } = optionsActions;
+  const {
+    loadOptions,
+    loadReactiveOptions,
+    setItemUp,
+    setItemDown
+  } = optionsActions;
 
-  const { option } = useSelector(state => state.options);
+  const { option, pagination, allStrikes, strikes } = useSelector(
+    state => state.options
+  );
+
+  const { itemsAbove, itemsBelow } = pagination;
+
+  function handleScrool(e) {
+    e.preventDefault();
+
+    if (e.deltaY > 0) {
+      itemsBelow > 0 && dispatch(setItemDown());
+    } else {
+      itemsAbove > 0 && dispatch(setItemUp());
+    }
+  }
+
+  // const reloadOptions = useCallback(() => {
+  //   dispatch(loadReactiveOptions({ mainOption: "PETRE722" }));
+  // }, [strikes]);
 
   useEffect(() => {
     if (option) {
@@ -20,15 +49,39 @@ export const OptionsContainer = () => {
     }
   }, [option]);
 
+  // useEffect(() => {
+  //   reloadOptions();
+  // }, [strikes]);
+
   return (
     <Wrapper>
       <Options>
-        <div className="content">
+        <Header />
+        <MoveUp
+          onClick={() => itemsAbove > 0 && dispatch(setItemUp())}
+          disabled={itemsAbove < 1}
+          display={allStrikes.length > 0 ? 1 : 0}
+        >
+          <span className="totalItems">
+            Total de Itens: {allStrikes?.length}
+          </span>
+          <span className="countItems">Itens acima: {itemsAbove}</span>
+        </MoveUp>
+        <Main onWheel={allStrikes.length > 0 ? handleScrool : null}>
           <Call />
           <Strike />
           <Put />
-        </div>
-        <ShowMore />
+        </Main>
+        <MoveDown
+          onClick={() => itemsBelow > 0 && dispatch(setItemDown())}
+          disabled={itemsBelow < 1}
+          display={allStrikes.length > 0 ? 1 : 0}
+        >
+          <span className="totalItems">
+            Total de Itens: {allStrikes?.length}
+          </span>
+          <span className="countItems">Itens abaixo: {itemsBelow}</span>
+        </MoveDown>
       </Options>
 
       <AllOptions />

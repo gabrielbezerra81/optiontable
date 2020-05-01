@@ -3,68 +3,56 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { Loadable } from "../../../UI";
 
-import {
-  TableHeader,
-  TableHeaderTitle,
-  TableHeaderDate,
-  TableContent,
-  TableContentHeader
-} from "../Commons";
+import { TableContent } from "../Commons";
 import { Wrapper, TableContentRow, RowSelected } from "./PutStyle";
+
+import { optionsActions } from "../../../../store";
 
 export const Put = () => {
   const dispatch = useDispatch();
 
-  const { isLoadingRequest, puts } = useSelector(state => state.options);
+  const { setTableOption, removeTableOption } = optionsActions;
+
+  const { isLoadingRequest, puts, allOptions } = useSelector(
+    state => state.options
+  );
 
   return (
     <Wrapper>
-      <TableHeader right>
-        <TableHeaderTitle>Put</TableHeaderTitle>
-
-        <TableHeaderDate right>
-          27/07/2019
-          <span />
-        </TableHeaderDate>
-      </TableHeader>
-
       <TableContent>
-        <TableContentHeader cols={5}>
-          <h1>Compra</h1>
-          <h1>Venda</h1>
-          <h1>VI</h1>
-          <h1>VE</h1>
-          <h1>Taxa</h1>
-        </TableContentHeader>
-        <Loadable isLoading={isLoadingRequest} center>
+        <Loadable
+          isLoading={isLoadingRequest}
+          center
+          className="loadable-margin"
+        >
           {puts.map(put => (
             <TableContentRow key={put.id} cols={5}>
               <p
                 className="value"
                 onClick={() =>
                   dispatch(
-                    setTablePutOption({
+                    setTableOption({
                       ...put,
                       cv: "sell"
                     })
                   )
                 }
               >
-                {/* {put.compra && put.compra.toFixed(2)} */}
+                {put.compra?.toFixed(2)}
               </p>
 
               <p
                 className="value"
                 onClick={() =>
                   dispatch(
-                    setTablePutOption({
+                    setTableOption({
                       ...put,
                       cv: "buy"
                     })
                   )
                 }
               >
-                {/* {put.venda && put.venda.toFixed(2)} */}
+                {put.venda?.toFixed(2)}
               </p>
               <p>26.90</p>
               <p>26.90</p>
@@ -72,8 +60,8 @@ export const Put = () => {
 
               <RowSelected
                 active={
-                  puts.filter(({ id }) => id === put.id)[0] !== undefined
-                    ? puts.filter(({ id }) => id === put.id)[0].cv
+                  allOptions.filter(({ id }) => id === put.id)[0] !== undefined
+                    ? allOptions.filter(({ id }) => id === put.id)[0].cv
                     : ""
                 }
               >
@@ -81,22 +69,23 @@ export const Put = () => {
                   className="type"
                   onClick={() =>
                     dispatch(
-                      setTablePutOption({
+                      setTableOption({
                         ...put
                       })
                     )
                   }
                 >
                   <span>
-                    {puts.filter(({ id }) => id === put.id)[0] !== undefined
-                      ? puts.filter(({ id }) => id === put.id)[0].initials
+                    {allOptions.filter(({ id }) => id === put.id)[0] !==
+                    undefined
+                      ? allOptions.filter(({ id }) => id === put.id)[0].initials
                       : ""}
                   </span>
                 </div>
 
                 <div
                   className="remove"
-                  onClick={() => dispatch(removeTablePutOption(put.id))}
+                  onClick={() => dispatch(removeTableOption({ id: put.id }))}
                 >
                   <span>x</span>
                 </div>
