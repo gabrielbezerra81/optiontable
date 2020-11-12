@@ -7,6 +7,7 @@ const { Types, Creators } = createActions({
   setFieldValues: ["payload"],
   setTableOption: ["payload"],
   removeTableOption: ["payload"],
+  createChannel: ["payload"],
   loadPagination: [],
   setItemUp: [],
   setItemDown: []
@@ -17,6 +18,7 @@ const INITIAL_STATE = {
   isRequestFailed: false,
   navbar: {},
   option: "",
+  reactiveOptionURL: "",
   allCalls: [],
   allStrikes: [],
   allPuts: [],

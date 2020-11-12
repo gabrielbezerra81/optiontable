@@ -1,4 +1,5 @@
-import { call, put } from "redux-saga/effects";
+import { eventChannel, END } from "redux-saga";
+import { call, put, take, takeEvery, cancelled } from "redux-saga/effects";
 import { toast } from "react-toastify";
 
 import { api } from "../../config/axios";
@@ -60,30 +61,15 @@ export function* loadOptions({ payload }) {
 }
 
 export function* loadReactiveOptions({ payload }) {
-  try {
-    yield put(loadingOptions(true));
+  const { mainOption, tableOptions } = payload;
 
-    const { mainOption, tableOptions } = payload;
+  const reactiveOptionURL = `http://173.249.37.183:8090/quotes/symbols?symbols=${mainOption.toUpperCase()} ${
+    tableOptions ? "," + tableOptions.join(",") : ""
+  }`;
 
-    yield put(setFieldValues({ field: "option", values: mainOption }));
+  yield put(setFieldValues({ field: "option", values: mainOption }));
 
-    const source = new EventSource(
-      `http://173.249.37.183:8090/quotes/symbols?symbols=${mainOption.toUpperCase()} ${
-        tableOptions ? "," + tableOptions.join(",") : ""
-      }`
-    );
-
-    let data = {};
-
-    source.onmessage = function loadSource(event) {
-      if (typeof event.data !== "undefined") {
-        console.log(JSON.parse(event.data));
-      }
-    };
-  } catch (error) {
-    console.log(error);
-    toast.error(SERVER_ERROR);
-  } finally {
-    yield put(loadingOptions(false));
-  }
+  yield put(
+    setFieldValues({ field: "reactiveOptionURL", values: reactiveOptionURL })
+  );
 }

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import settingsIcon from "../../assets/icons/settings.svg";
@@ -13,9 +13,11 @@ import { optionsActions } from "../../store";
 export const Navbar = ({ handleSettings, handleExit }) => {
   const dispatch = useDispatch();
 
-  const { loadReactiveOptions, navbar } = optionsActions;
+  const { loadReactiveOptions, setFieldValues } = optionsActions;
 
-  const { isLoadingRequest } = useSelector(state => state.options);
+  const { isLoadingRequest, navbar, reactiveOptionURL } = useSelector(
+    state => state.options
+  );
 
   const optionRef = useRef();
 
@@ -24,31 +26,59 @@ export const Navbar = ({ handleSettings, handleExit }) => {
     if (option) {
       dispatch(
         loadReactiveOptions({
-          mainOption: option
+          mainOption: option,
+          tableOptions: ["PETRE722"]
         })
       );
     }
   }
 
-  // const source = new EventSource(
-  //   `http://173.249.37.183:8090/quotes/symbols?symbols=${optionRef.current?.value.toUpperCase()}`
-  // );
+  // const transformData = array => {
+  //   const result = array.map(({symbol}) => {
+  //     return{
 
-  // const loadNavbarContent = useCallback(() => {
-  //   source.onmessage = function(event) {
-  //     if (typeof event.data !== "undefined") {
-  //       console.log(isDataNotEmpty);
-  //       isDataNotEmpty &&
-  //         dispatch(
-  //           setFieldValues({ field: "navbar", values: JSON.parse(event.data) })
-  //         );
   //     }
-  //   };
-  // }, []);
+  //   })
+  // };
 
-  // useEffect(() => {
-  //   isDataNotEmpty && loadNavbarContent();
-  // }, [source, isDataNotEmpty]);
+  const getMenuData = array => {
+    const result = array.find(
+      ({ symbol }) => symbol === optionRef.current?.value.toUpperCase()
+    );
+
+    return result;
+  };
+
+  useEffect(() => {
+    let eventSource;
+    const result = [];
+
+    if (reactiveOptionURL) {
+      eventSource = new EventSource(reactiveOptionURL);
+
+      eventSource.onmessage = ({ data }) => {
+        if (typeof data !== undefined) {
+          result.push(JSON.parse(data));
+          console.log(data);
+        }
+
+        const navbar = getMenuData(result);
+
+        dispatch(setFieldValues({ field: "navbar", values: navbar }));
+      };
+
+      eventSource.onerror = error => {
+        console.log("erro", error);
+      };
+    }
+
+    return () => {
+      if (reactiveOptionURL) {
+        eventSource.close();
+        //eventSource.removeEventListener("ping", () => {});
+      }
+    };
+  }, [reactiveOptionURL]);
 
   return (
     <Wrapper>
@@ -91,13 +121,13 @@ export const Navbar = ({ handleSettings, handleExit }) => {
         <Item>
           <h1>Compra</h1>
           <Loadable isLoading={isLoadingRequest} className="loading">
-            <p></p>
+            <p>{navbar?.compra}</p>
           </Loadable>
         </Item>
         <Item>
           <h1>Venda</h1>
           <Loadable isLoading={isLoadingRequest} className="loading">
-            <p></p>
+            <p>{navbar?.venda}</p>
           </Loadable>
         </Item>
 
