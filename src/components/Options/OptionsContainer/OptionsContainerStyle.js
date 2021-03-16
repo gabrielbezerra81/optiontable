@@ -17,7 +17,7 @@ export const Options = styled.div`
 
 export const Main = styled.div`
   margin-top: -70px;
-  display: grid;
+  display: flex;
   grid-template-columns: 3fr 1fr 3fr;
   grid-column-gap: 10px;
 `;

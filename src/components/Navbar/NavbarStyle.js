@@ -100,7 +100,7 @@ export const Buttons = styled.div`
     } */
   }
 
-  img {
+  svg {
     width: 40px;
     margin: 0 5px;
 

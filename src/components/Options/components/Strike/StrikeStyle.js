@@ -23,7 +23,7 @@ export const TableContentRow = styled.div`
     z-index: 999;
   }
 
-  img {
+  svg {
     width: 20px;
     position: relative;
     top: -36px;

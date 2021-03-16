@@ -6,7 +6,7 @@ import { loadOptions, loadReactiveOptions } from "./optionsSaga";
 
 export default function* rootSaga() {
   return yield all([
-    //---------Otions Actions-------------
+    // ---------Options Actions-------------
     takeLatest(OptionsTypes.LOAD_OPTIONS, loadOptions),
     takeEvery(OptionsTypes.LOAD_REACTIVE_OPTIONS, loadReactiveOptions)
   ]);

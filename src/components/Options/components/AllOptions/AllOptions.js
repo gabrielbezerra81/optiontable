@@ -2,14 +2,14 @@ import React, { Fragment, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useUndo from "use-undo";
 
-import searchIcon from "../../../../assets/icons/search-icon.svg";
-import undoIcon from "../../../../assets/icons/undo.svg";
-import redoIcon from "../../../../assets/icons/redo.svg";
-import closeIcon from "../../../../assets/icons/close.svg";
-import moreOrLessIcon from "../../../../assets/icons/more-or-less.svg";
-import arrowsIcon from "../../../../assets/icons/horizontal-arrows.svg";
-import bellIcon from "../../../../assets/icons/bell.svg";
-import settings from "../../../../assets/icons/settings.svg";
+import { ReactComponent as SearchIcon } from "../../../../assets/icons/search-icon.svg";
+import { ReactComponent as UndoIcon } from "../../../../assets/icons/undo.svg";
+import { ReactComponent as RedoIcon } from "../../../../assets/icons/redo.svg";
+import { ReactComponent as CloseIcon } from "../../../../assets/icons/close.svg";
+import { ReactComponent as MoreOrLessIcon } from "../../../../assets/icons/more-or-less.svg";
+import { ReactComponent as ArrowsIcon } from "../../../../assets/icons/horizontal-arrows.svg";
+import { ReactComponent as BellIcon } from "../../../../assets/icons/bell.svg";
+import { ReactComponent as Settings } from "../../../../assets/icons/settings.svg";
 
 import {
   Wrapper,
@@ -25,9 +25,7 @@ import {
   Signature
 } from "./AllOptionsStyle";
 
-import { Icon, Loadable } from "../../../UI";
-
-import { color } from "../../../../config/styles";
+import { Loadable } from "../../../UI";
 
 import { optionsActions } from "../../../../store";
 
@@ -59,24 +57,24 @@ export const AllOptions = () => {
   return (
     <Wrapper>
       <Header>
-        <div className="body"></div>
+        <div className="body" />
 
         <div className="strategy">
           <h2>Estratégia</h2>
         </div>
 
         <div className="search">
-          <Icon src={searchIcon} color={color.primaryLight} />
+          <SearchIcon />
         </div>
       </Header>
 
       <Actions>
         <button className="button" onClick={undo} disabled={!canUndo}>
-          <h2>Desfazer</h2> <Icon src={undoIcon} />
+          <h2>Desfazer</h2> <UndoIcon />
         </button>
 
         <button className="button" onClick={redo} disabled={!canRedo}>
-          <h2>Refazer</h2> <Icon src={redoIcon} />
+          <h2>Refazer</h2> <RedoIcon />
         </button>
 
         <button
@@ -86,7 +84,7 @@ export const AllOptions = () => {
           }
           disabled={present.length < 1}
         >
-          <h2>Limpar</h2> <Icon src={closeIcon} width="20px" />
+          <h2>Limpar</h2> <CloseIcon width="20" />
         </button>
       </Actions>
       <Loadable isLoading={isLoadingRequest} center>
@@ -97,27 +95,27 @@ export const AllOptions = () => {
           <Options>
             <div className="button">
               <h2>Strikes</h2>
-              <Icon src={moreOrLessIcon} />
+              <MoreOrLessIcon />
             </div>
 
             <div className="button">
               <h2>Largura</h2>
-              <Icon src={moreOrLessIcon} />
+              <MoreOrLessIcon />
             </div>
 
             <div className="button">
               <h2> QTDE</h2>
-              <Icon src={moreOrLessIcon} />
+              <MoreOrLessIcon />
             </div>
 
             <div className="button">
               <h2>Vencimentos</h2>
-              <Icon src={moreOrLessIcon} />
+              <MoreOrLessIcon />
             </div>
 
             <div className="button">
-              <h2>Iverter C/V</h2>
-              <Icon src={arrowsIcon} />
+              <h2>Inverter C/V</h2>
+              <ArrowsIcon />
             </div>
           </Options>
 
@@ -128,7 +126,7 @@ export const AllOptions = () => {
               <h2>QTDE</h2>
               <h2>VCTO</h2>
               <h2>Strike</h2>
-              <div></div>
+              <div />
             </TableHeader>
 
             <TableContent>
@@ -182,7 +180,7 @@ export const AllOptions = () => {
                     <p>{option.type}</p>
 
                     <img
-                      //src={require(`assets/icons/flags/${option.model.toUpperCase()}.svg`)}
+                      // src={require(`assets/icons/flags/${option.model.toUpperCase()}.svg`)}
                       alt=""
                     />
 
@@ -266,11 +264,11 @@ export const AllOptions = () => {
                   <div className="alert">
                     <p> Cadastar alerta!</p>
                     <span />
-                    <Icon src={bellIcon} />
+                    <BellIcon />
                   </div>
                 </div>
 
-                <img src={settings} alt="" />
+                <Settings />
               </div>
             </div>
           </Alert>

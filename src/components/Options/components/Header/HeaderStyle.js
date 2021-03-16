@@ -21,10 +21,11 @@ export const StrikeTableHeader = styled.div`
     text-transform: uppercase;
     font-family: ${font.family.primary};
   }
-  img {
+  svg {
     cursor: pointer;
     height: 15px;
     margin-left: 5px;
+    transition: transform 0.2s;
     transform: ${props => (props.rotate ? "rotate(180deg)" : "rotate(0deg)")};
     :hover {
       opacity: 0.8;

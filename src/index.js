@@ -8,14 +8,15 @@ import { Navbar, Options } from "./components";
 
 const TableOptions = ({ navbarActions }) => {
   return (
-    <ComponentWrapper>
-      <Navbar
-        handleSettings={navbarActions?.handleSettings}
-        handleExit={navbarActions?.handleExit}
-      />
-
-      <Options />
-    </ComponentWrapper>
+    <div>
+      <ComponentWrapper>
+        <Navbar
+          handleSettings={navbarActions?.handleSettings}
+          handleExit={navbarActions?.handleExit}
+        />
+        <Options />
+      </ComponentWrapper>
+    </div>
   );
 };
 
@@ -27,3 +28,6 @@ TableOptions.propTypes = {
     handleExit: PropTypes.func
   })
 };
+
+// "react": "file:../path-to-dev-app/node_modules/react",
+// "react-dom": "file:../path-to-dev-app/node_modules/react-dom"

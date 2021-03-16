@@ -1,7 +1,9 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-use-before-define */
 import { createReducer, createActions } from "reduxsauce";
 
 const { Types, Creators } = createActions({
-  loadingOptions: ["isLoadingRequest"],
+  loadingOptions: ["isLoadingRequest"], // Creators.loadingOptions(true) { type: 'LOADING_OPTIONS', isLoadingRequest: true }
   loadOptions: ["payload"],
   loadReactiveOptions: ["payload"],
   setFieldValues: ["payload"],
@@ -11,7 +13,15 @@ const { Types, Creators } = createActions({
   loadPagination: [],
   setItemUp: [],
   setItemDown: []
+  // custom: null, // { type: 'CUSTOM' }
+  // requestWithDefaultValues: { username: 'guest', password: null },
 });
+
+// Creators.requestWithDefaultValues({
+//   password: '123456',
+//   undefinedKeyWontBeUsed: true
+// })
+// { type: 'REQUEST_WITH_DEFAULT_VALUES', username: 'guest', password: '123456' }
 
 const INITIAL_STATE = {
   isLoadingRequest: false,
@@ -34,6 +44,8 @@ const INITIAL_STATE = {
   }
 };
 
+// dispatch(loadingOptions(true))
+
 const loadingOptions = (state, { isLoadingRequest }) => {
   return {
     ...state,
@@ -41,6 +53,7 @@ const loadingOptions = (state, { isLoadingRequest }) => {
   };
 };
 
+// dispatch(setFieldValues(payload))   payload = {field:'',values:''} action => {type: SET_FIELD_VAULES, payload}
 const setFieldValues = (state, { payload }) => {
   const { field, values } = payload;
 
@@ -211,7 +224,7 @@ export { Types as OptionsTypes };
 
 export { Creators as optionsActions };
 
-export const reducer = createReducer(INITIAL_STATE, {
+export const HANDLERS = {
   [Types.LOADING_OPTIONS]: loadingOptions,
   [Types.SET_FIELD_VALUES]: setFieldValues,
   [Types.SET_TABLE_OPTION]: setTableOption,
@@ -219,4 +232,6 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.LOAD_PAGINATION]: loadPagination,
   [Types.SET_ITEM_UP]: setItemUp,
   [Types.SET_ITEM_DOWN]: setItemDown
-});
+};
+
+export const reducer = createReducer(INITIAL_STATE, HANDLERS);

@@ -1,5 +1,4 @@
-import { eventChannel, END } from "redux-saga";
-import { call, put, take, takeEvery, cancelled } from "redux-saga/effects";
+import { call, put } from "redux-saga/effects";
 import { toast } from "react-toastify";
 
 import { api } from "../../config/axios";
@@ -63,7 +62,7 @@ export function* loadOptions({ payload }) {
 export function* loadReactiveOptions({ payload }) {
   const { mainOption, tableOptions } = payload;
 
-  const reactiveOptionURL = `http://173.249.37.183:8090/quotes/symbols?symbols=${mainOption.toUpperCase()} ${
+  const reactiveOptionURL = `http://173.249.37.183:8090/quotes/symbols?symbols=${mainOption.toUpperCase()}${
     tableOptions ? "," + tableOptions.join(",") : ""
   }`;
 

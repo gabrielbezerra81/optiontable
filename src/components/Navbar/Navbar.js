@@ -1,8 +1,8 @@
 import React, { useRef, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import settingsIcon from "../../assets/icons/settings.svg";
-import closeIcon from "../../assets/icons/close.svg";
+import { ReactComponent as SettingsIcon } from "../../assets/icons/settings.svg";
+import { ReactComponent as CloseIcon } from "../../assets/icons/close.svg";
 
 import { Wrapper, Item, CorporationName, Buttons } from "./NavbarStyle";
 
@@ -27,7 +27,7 @@ export const Navbar = ({ handleSettings, handleExit }) => {
       dispatch(
         loadReactiveOptions({
           mainOption: option,
-          tableOptions: ["PETRE722"]
+          tableOptions: ["PETRE722"] // "PETRE722"
         })
       );
     }
@@ -54,6 +54,7 @@ export const Navbar = ({ handleSettings, handleExit }) => {
     const result = [];
 
     if (reactiveOptionURL) {
+      // eslint-disable-next-line no-undef
       eventSource = new EventSource(reactiveOptionURL);
 
       eventSource.onmessage = ({ data }) => {
@@ -75,13 +76,13 @@ export const Navbar = ({ handleSettings, handleExit }) => {
     return () => {
       if (reactiveOptionURL) {
         eventSource.close();
-        //eventSource.removeEventListener("ping", () => {});
+        // eventSource.removeEventListener("ping", () => {});
       }
     };
   }, [reactiveOptionURL]);
 
   return (
-    <Wrapper>
+    <Wrapper className="draggableNavbar">
       <div className="search">
         <SearchInput
           inputProps={{
@@ -102,20 +103,20 @@ export const Navbar = ({ handleSettings, handleExit }) => {
         <Item red>
           <h1>Oscilação</h1>
           <Loadable isLoading={isLoadingRequest} className="loading">
-            <p></p>
+            <p />
           </Loadable>
         </Item>
 
         <Item>
           <h1>Mínimo</h1>
           <Loadable isLoading={isLoadingRequest} className="loading">
-            <p></p>
+            <p />
           </Loadable>
         </Item>
         <Item>
           <h1>Máximo</h1>
           <Loadable isLoading={isLoadingRequest} className="loading">
-            <p></p>
+            <p />
           </Loadable>
         </Item>
         <Item>
@@ -132,21 +133,20 @@ export const Navbar = ({ handleSettings, handleExit }) => {
         </Item>
 
         <Loadable isLoading={isLoadingRequest} className="loading">
-          <CorporationName></CorporationName>
+          <CorporationName />
         </Loadable>
       </div>
 
       <Buttons>
-        <img
-          src={settingsIcon}
+        <SettingsIcon
           alt="Botão de configurações"
           className="button"
           onClick={handleSettings}
         />
-        <img
-          src={closeIcon}
-          alt=" Botão de fechar"
+
+        <CloseIcon
           className="button"
+          alt=" Botão de fechar"
           onClick={handleExit}
         />
       </Buttons>

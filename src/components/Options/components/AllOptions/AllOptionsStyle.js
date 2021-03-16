@@ -8,6 +8,10 @@ export const Wrapper = styled.div`
   flex-direction: column;
   margin: 0 5px;
 
+  svg {
+    width: 24px;
+  }
+
   button {
     cursor: pointer;
     display: flex;
@@ -49,6 +53,13 @@ export const Header = styled.div`
     border-radius: 0 5px 5px 0;
 
     ${effect.hover}
+
+    svg {
+      path {
+        fill: ${color.primaryLight};
+        width: 24px;
+      }
+    }
   }
   transition: 1s;
   .searchInput {

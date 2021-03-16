@@ -1,5 +1,5 @@
-export { color } from './colors'
+export { color } from "./colors";
 
-export { font } from './fonts'
+export { font } from "./fonts";
 
-export { effect } from './effects'
+export { effect } from "./effects";

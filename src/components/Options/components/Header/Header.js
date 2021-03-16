@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
-import arrow from "../../../../assets/icons/arrow.svg";
+// eslint-disable-next-line import/no-named-default
+import { ReactComponent as Arrow } from "../../../../assets/icons/arrow.svg";
 
 import {
   TableHeader,
@@ -48,7 +49,7 @@ export const Header = () => {
       <section>
         <StrikeTableHeader rotate={isToRotate ? 1 : 0}>
           <h1>Strike</h1>
-          <img onClick={handleStrikeOrder} src={arrow} alt="Seta" />
+          <Arrow onClick={handleStrikeOrder} alt="Seta" />
         </StrikeTableHeader>
         <TableContent>
           <StrikeTableContentHeader cols={3}>

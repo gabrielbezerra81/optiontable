@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-import horizontalLines from "../../../../assets/icons/horizontal-lines.svg";
+import { ReactComponent as HorizontalLines } from "../../../../assets/icons/horizontal-lines.svg";
 
 import { Loadable } from "../../../UI";
 
@@ -23,7 +23,7 @@ export const Strike = () => {
               <p className="code">H27</p>
               <p>{strike.strike}</p>
               <p className="code">H27</p>
-              <img src={horizontalLines} alt="Linhas horizontais" />
+              <HorizontalLines alt="Linhas horizontais" />
             </TableContentRow>
           ))}
         </Loadable>

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import styled from "styled-components";
 
-import searchIcon from "../../assets/icons/search-icon.svg";
+import { ReactComponent as SearchIcon } from "../../assets/icons/search-icon.svg";
 import { color } from "../../config/styles";
 
 export const Wrapper = styled.div`
@@ -33,7 +33,7 @@ export const Button = styled.div`
   :hover {
     opacity: 0.8;
   }
-  img {
+  svg {
     width: 20px;
   }
 `;
@@ -48,7 +48,7 @@ export const SearchInput = ({ inputProps, onSearch }) => {
     <Wrapper>
       <Input onKeyPress={handlePress} {...inputProps} />
       <Button data-value="123" onClick={onSearch}>
-        <img src={searchIcon} alt="ícone de pesquisa" />
+        <SearchIcon alt="ícone de pesquisa" />
       </Button>
     </Wrapper>
   );

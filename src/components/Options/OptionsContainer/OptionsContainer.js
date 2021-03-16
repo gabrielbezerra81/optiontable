@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import {
@@ -16,20 +16,15 @@ import { optionsActions } from "../../../store";
 export const OptionsContainer = () => {
   const dispatch = useDispatch();
 
-  const {
-    loadOptions,
-    loadReactiveOptions,
-    setItemUp,
-    setItemDown
-  } = optionsActions;
+  const { loadOptions, setItemUp, setItemDown } = optionsActions;
 
-  const { option, pagination, allStrikes, strikes } = useSelector(
+  const { option, pagination, allStrikes } = useSelector(
     state => state.options
   );
 
   const { itemsAbove, itemsBelow } = pagination;
 
-  function handleScrool(e) {
+  function handleScroll(e) {
     e.preventDefault();
 
     if (e.deltaY > 0) {
@@ -67,7 +62,7 @@ export const OptionsContainer = () => {
           </span>
           <span className="countItems">Itens acima: {itemsAbove}</span>
         </MoveUp>
-        <Main onWheel={allStrikes.length > 0 ? handleScrool : null}>
+        <Main onWheel={allStrikes.length > 0 ? handleScroll : null}>
           <Call />
           <Strike />
           <Put />
